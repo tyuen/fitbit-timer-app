@@ -1,0 +1,39 @@
+<svg id="main" viewport-fill="black">
+  <defs>
+    <symbol id="drag-box-sym">
+      <rect id="rect" x="0" y="0" width="100%" height="100%" fill="#8bc34a">
+        <animate attributeName="opacity" begin="enable" from="0" to="1" dur="0.3" easing="ease-out" final="keep" />
+        <animate attributeName="opacity" begin="disable" from="1" to="0" dur="0.5" easing="ease-out" final="keep" />
+      </rect>
+    </symbol>
+  </defs>
+
+  <use id="drag-box" href="#drag-box-sym" x="5" y="0" width="0" height="100%" />
+
+  <text id="count-time">m</text>
+  <text id="drag-time">0</text>
+  
+  <text id="start-time" class="small-time" fill="#4caf50" />
+  <text id="now-time" class="small-time" fill="white">9:42</text>
+  <text id="end-time" class="small-time" fill="#e91e63" />
+
+  <rect id="touch" x="0" y="0" width="100%" height="100%" pointer-events="visible" opacity="0"></rect>
+
+  <use id="cancel-btn" href="#combo-button-upper-left" fill="#333333" display="none">
+    <set href="combo-button-icon" attributeName="href" to="cancel.png"/>
+  </use>
+  
+  <svg id="warn" display="none">
+    <rect fill="black" x="0" y="0" width="100%" height="100%" />
+    <use href="#mixed-text-center-mid" class="dialog-mixed-text" fill="fb-white">
+      <set href="#top-padding" attributeName="display" to="none" />
+      <set href="#header/text" attributeName="text-buffer" to="Silent Mode" />
+      <set href="#header/text" attributeName="fill" to="fb-magenta"/>
+      <set href="#copy/text" attributeName="text-buffer" to="The timer will not buzz if this app is closed." />
+      <set href="#bottom-padding" attributeName="display" to="none" />
+    </use>
+    <use id="silent-btn" href="#square-button-neutral" y="$">
+      <set href="#text" attributeName="text-buffer" to="Silent Mode" />
+    </use>
+  </svg>
+</svg>

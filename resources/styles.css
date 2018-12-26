@@ -1,0 +1,42 @@
+#drag-time {
+  font-size: 160;
+  font-family: SevilleSharp-Bold;
+  text-length: 5;
+  text-anchor: middle;
+  x: 50%-2;
+  y: 60%;
+  fill: white;
+  opacity: 0.8;
+}
+#count-time {
+  font-size: 70;
+  font-family: Seville-Bold;
+  text-length: 15;
+  text-anchor: middle;
+  x: 50%-2;
+  y: 85%;
+  fill: white;
+  opacity: 0.4;
+}
+.small-time {
+  font-size: 28;
+  font-family: Seville-Bold;
+  text-length: 5;  
+  opacity: 0.5;
+}
+#start-time {
+  text-anchor: end;
+  x: 50%-30;
+  y: 100%-3;
+}
+#now-time {
+  text-anchor: middle;
+  x: 50%;
+  y: 25;
+  opacity: 0.4;
+}
+#end-time {
+  text-anchor: start;
+  x: 50%+30;
+  y: 100%-4;
+}
