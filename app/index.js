@@ -17,6 +17,7 @@ const touchNode = $("touch");
 const dragBoxNode = $("drag-box");
 const dragTimeNode = $("drag-time");
 const countTimeNode = $("count-time");
+//const progBarNode = $("prog-bar");
 
 const startTimeNode = $("start-time");
 const nowTimeNode = $("now-time");
@@ -83,14 +84,15 @@ touchNode.onmousedown = e => {
 
     dragTimeNode.text = "0";
     countTimeNode.text = "m";
-    startTimeNode.text = "";
-    endTimeNode.text = "";
+    startTimeNode.text = "-:--";
+    endTimeNode.text = "-:--";
     isRung = false;
 
     btnNode.style.display = "none";  //hide X button
 
     dragBoxNode.width = 0;
     dragBoxNode.animate("enable");
+    //progBarNode.sweepAngle = 0;
   }
   vibration.stop();  //so the user can turn off an active buzzer with a tap
   mouseDownStart = now;
@@ -142,8 +144,8 @@ touchNode.onmouseup = e => {
     } else {
       startTime = endTime = 0;
       dragTimeNode.text = 0;
-      startTimeNode.text = "";
-      endTimeNode.text = "";
+      startTimeNode.text = "-:--";
+      endTimeNode.text = "-:--";
       btnNode.style.display = "none";
       //show a bit of the drag bar as an affordance of user interaction
       dragBoxNode.width = 2;
@@ -165,8 +167,8 @@ let adjustTimer;
 function checkAndAdjust() {
   clearTimeout(adjustTimer);
   let diff = endTime - Date.now();
-  if(diff > 0) {
-    if(diff > 30000) {
+  if(diff > -100) {
+    if(diff > 60000) {
       //don't set a timer for more than 30s (arbitrary) in case
       //the clock queue is inaccurate or incase it is GC'ed.
       setTimeout(checkAndAdjust, 30000);
@@ -174,7 +176,7 @@ function checkAndAdjust() {
       setTimeout(checkAndAdjust, diff - 15000);
     } else {
       display.poke();  //poke screen every second so that clock.ontick() is called
-      setTimeout(checkAndAdjust, 1000);      
+      setTimeout(checkAndAdjust, Math.min(Math.max(0, diff - 1000), 1000));
     }
   }
 }
@@ -193,12 +195,14 @@ clock.ontick = e => {
         vibration.start("ring");
       }
       btnNode.style.display = "none";
+      //progBarNode.sweepAngle = 0;
 
     } else if(now - startTime <= 1000) {
       //keep the user's selection visible for 1 second (1 cycle)
 
     } else if(now < endTime) {
       let t = endTime - now;
+      //progBarNode.sweepAngle = 360 - Math.max(0, 360*t/(endTime - startTime));
       let mins = Math.floor(t/60000);
       dragTimeNode.text = mins;
       t %= 60000;
@@ -213,8 +217,9 @@ btnNode.onclick = () => {
   endTime = 0;
   dragTimeNode.text = "0";
   countTimeNode.text = "m";
-  startTimeNode.text = "";
-  endTimeNode.text = "";
+  startTimeNode.text = "-:--";
+  endTimeNode.text = "-:--";
+  //progBarNode.sweepAngle = 0;
   isRung = false;
   btnNode.style.display = "none";
   checkAndAdjust();  //clears any timeouts
@@ -228,7 +233,7 @@ $("silent-btn").onclick = () => {
 
 let triedExit = false;
 document.onkeypress = e => {
-  if(e && e.key === "back" && !triedExit && startTime > 0) {
+  if(e && e.key === "back" && !triedExit && Date.now() < endTime) {
     triedExit = true;
     if(!readPopup) {
       $("warn").style.display = "inline";
